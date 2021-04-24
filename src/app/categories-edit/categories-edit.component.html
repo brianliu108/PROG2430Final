@@ -1,0 +1,30 @@
+<h1>Edit </h1>
+<form [formGroup]="categoryForm">
+
+    <div class="fields-wrapper">
+        <label for="categoryName">Name</label>
+        <input id="categoryNameEdit" class="formInput form-control" type="text" formControlName="_categoryName">
+        <div *ngIf="categoryForm.controls['_categoryName'].invalid && (categoryForm.controls['_categoryName'].touched
+              || categoryForm.controls['_categoryName'].dirty)">
+            <span class="text-danger" *ngIf="categoryForm.controls['_categoryName'].errors?.required">Category Name is required</span>
+        </div>
+    </div>
+
+    <div class="fields-wrapper form-group">
+        <label for="typeId">Type</label>
+        <select id="categoryTypeEdit" formControlName="_categoryType" class="form-control">
+            <option *ngFor="let type of types; let i = index;" [value]="type.typeId">{{type.typeName}}</option>
+        </select>
+        <div *ngIf="categoryForm.controls['_categoryType'].invalid && (categoryForm.controls['_categoryType'].touched
+        || categoryForm.controls['_categoryType'].dirty)">
+            <span class="text-danger" *ngIf="categoryForm.controls['_categoryType'].errors?.required">Category Type is
+                required</span>
+        </div>
+    </div>
+
+    <div class="fields-wrapper">
+        <input class="btn btn-primary submitButton" id="btnSubmit" type="submit" value="Submit" (click)="btnEditCategory_click()">
+    </div>
+
+</form>
+<a href="javascript:history.back()">Back</a>

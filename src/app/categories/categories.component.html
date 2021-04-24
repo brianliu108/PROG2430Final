@@ -1,0 +1,24 @@
+<h1>Categories</h1>
+    <a *ngIf="!incomeActive" role="button" class="btn btn-primary topBtn" routerLink="/categories/add/2">+Expense</a>
+    <a *ngIf="incomeActive" role="button" class="btn btn-primary topBtn" routerLink="/categories/add/1">+Income</a>
+<div id="btnGroup" class="btn-group" >
+    <button role="button" class="btn btn-primary btn-check" [class.active]="!incomeActive" (click)="swapActive()">Expense</button>
+    <button role="button" class="btn btn-primary btn-check" [class.active]="incomeActive" (click)="swapActive()">Income</button>
+</div>
+
+<table class="table list">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>                                
+        </tr>
+    </thead>
+    <tbody>        
+            <tr *ngFor="let category of categories">
+                <td scope="row">{{category.categoryName}}</td>                               
+                <td class="btn-group">
+                    <a id="btnEditCategory" class="btn btn-secondary" (click)="btnEditCategory_click(category)">Edit</a>
+                    <a id="btnDeleteCategory" class="btn btn-danger" (click)="btnDeleteCategory_click(category)">Delete</a>
+                </td>
+            </tr>                                   
+    </tbody>
+</table>

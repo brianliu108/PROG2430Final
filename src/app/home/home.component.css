@@ -1,0 +1,66 @@
+.topBar {
+  text-align: center;
+  margin-left: 25%;
+}
+
+.topBarItem {
+  display: inline-block;
+  margin: 0 1%;
+}
+
+.topBarText {
+  text-align: center;
+  width: 250px;
+}
+
+.topBarButton {
+  font-weight:900;
+}
+
+table {
+  width: 80%;
+  margin: 0 auto;
+}
+
+#btnArea {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.balance {
+  border-top: 1px solid black;
+}
+
+.bottomButton {
+  margin-right: 1%;
+}
+
+#mobileTop {
+  display: none;
+}
+
+@media only screen and (max-width: 663px) {
+  #top {
+    display: none;
+  }
+
+  #mobileTop {
+    display: block;
+  }
+
+  .topBarButton {
+    margin-right: 15%;
+  }
+
+  .leftButton {
+      margin-left: 10%;
+  }
+
+}
+
+@media only screen and (max-width: 334px) {
+    .bottomButton {
+        margin-bottom: 1%;
+    }
+  
+  }

@@ -1,0 +1,64 @@
+<h1>Edit Transaction</h1>
+<form [formGroup]="transactionForm">
+
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-primary">
+            <input type="radio" value="2" formControlName="_transactionType" name="_transactionType"
+            id="transcationExpense" autocomplete="off" (click)="changeType(2)" [checked]="this.transactionForm.get('_transactionType').value == 2"> Expense
+        </label>
+        <label class="btn btn-primary">
+            <input type="radio" value="1" formControlName="_transactionType" name="_transactionType"
+            id="transactionIncome" autocomplete="off" (click)="changeType(1)" [checked]="this.transactionForm.get('_transactionType').value == 1"> Income
+        </label>     
+    </div>
+    <div class="text-danger" id="_transactionTypeError"></div>
+
+    <div class="fields-wrapper">
+        <label for="transactionCategory">Category</label>
+        <a routerLink="/categories/add/">+Add new category</a>
+        <select formControlName="_transactionCategory" class="form-control" id="transactionCategory">
+            <option [id]="'category' + category.categoryId" *ngFor="let category of this.categories" [ngValue]="category.categoryId">
+                {{category.categoryName}}</option>
+        </select>
+        <div class="text-danger" id="_transactionCategoryError"></div>
+    </div>
+
+    <div class="fields-wrapper">
+        <label for="transactionDate">Date</label>
+        <input formControlName="_transactionDate" class=" form-control" type="date" id="transactionDate">
+        
+        <div class="text-danger" id="_transactionDateError"></div>
+    </div>
+
+    <div class="fields-wrapper">
+        <label for="transactionAmount">Amount</label>
+        <input formControlName="_transactionAmount" class="form-control" type="text" id="transactionAmount"
+            placeholder="$0.00" value="0">
+        
+        <div class="text-danger" id="_transactionAmountError"></div>
+    </div>
+
+    <div class="fields-wrapper">
+        <label for="transactionNote">Note</label>
+        <input formControlName="_transactionNote" class="form-control" id="transactionNote">
+    </div>
+
+    <label id="btnRecurring" class="btn btn-primary btn-sm">
+        <input type="checkbox" id="btnRecurring" formControlName="_recurring" autocomplete="off"
+            (click)="changeRecurring()"> Recurring?
+    </label>
+    
+    <div id="recurringOptions" [hidden]="!showRecurring">
+        <div class="fields-wrapper">
+            <label for="_endDate">End Date</label>
+            <input formControlName="_endDate" class="form-control" type="date" id="transactionEndDate">
+            <div class="text-danger" id="_endDateError"></div>
+        </div>
+    </div>
+
+    <div class="fields-wrapper">
+        <input class="btn btn-primary" id="btnSubmit" type="submit" value="Submit" (click)="btnSubmit_click()">
+    </div>
+
+</form>
+<a href="javascript:history.back()">Back</a>

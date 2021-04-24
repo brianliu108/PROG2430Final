@@ -1,0 +1,41 @@
+<table class="homeTable">
+    <div id="top" class="topBar">
+        <button role="button" class="btn btn-primary topBarItem topBarButton" (click)="changeMonth(true)">&#8249;</button>
+        <h3 class="topBarItem">{{dateMonth}}</h3>
+        <button role="button" class="btn btn-primary topBarItem topBarButton" (click)="changeMonth(false)">&#8250;</button>
+    </div>
+    <div id="mobileTop" class="topBar">
+        <h3 class="topBarItem">{{dateMonth}}</h3>
+        <button role="button" class="btn btn-primary topBarItem topBarButton leftButton" (click)="changeMonth(true)">&#8249;</button>
+        <button role="button" class="btn btn-primary topBarItem topBarButton" (click)="changeMonth(false)">&#8250;</button>
+    </div>
+    <tbody>
+        <tr>
+            <td><h4>Income</h4></td>
+            <td><h4 class="text-success">${{totalIncome.toFixed(2)}}</h4></td>
+        </tr>
+        <tr>
+            <td>
+                <h4>Expenses</h4>
+            </td>
+            <td>
+                <h4 class="text-danger">${{totalExpense.toFixed(2)}}</h4>
+            </td>
+            <td></td>
+        </tr>
+        <tr id="expensesArea" *ngFor="let expense of sortedExpensesArr">
+            <td>{{expense[0]}}</td>
+            <td>${{expense[1].toFixed(2)}}</td>
+        </tr>
+        <tr class="balance">
+            <td>
+                <h4>Balance</h4>
+            </td>
+            <td>
+                <h4 [class.text-danger]="balance < 0" [class.text-success]="balance > 0">${{balance.toFixed(2)}}</h4>
+            </td>
+        </tr>
+    </tbody>
+    <a routerLink="/transactions/add/expense" class="btn btn-primary bottomButton">+Expense</a>
+    <a routerLink="/transactions/add/income" class="btn btn-primary">+Income</a>
+</table>

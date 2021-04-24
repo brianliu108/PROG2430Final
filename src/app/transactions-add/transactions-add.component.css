@@ -1,0 +1,11 @@
+.form-control, .form-select {
+    display: block;
+}
+
+#btnRecurring {
+    margin: 1% auto;
+}
+
+#transactionEndDate {
+    margin-bottom: 1%;
+}
