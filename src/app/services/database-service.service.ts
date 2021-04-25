@@ -36,11 +36,11 @@ export class DatabaseServiceService {
     let createType = "CREATE TABLE type (" +
       "typeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
       "typeName VARCHAR(30) NOT NULL);";
-    let createCategory = "CREATE IF NOT EXISTS TABLE category (" +
-      "categoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-      "typeId INTEGER NOT NULL, " +
-      "categoryName VARCHAR(30) NOT NULL, " +
-      "FOREIGN KEY(typeId) REFERENCES type(typeId) " +
+    let createCategory = "CREATE TABLE IF NOT EXISTS category (" +
+      "categoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+      "typeId INTEGER NOT NULL," +
+      "categoryName VARCHAR(30) NOT NULL," +
+      "FOREIGN KEY(typeId) REFERENCES type(typeId)" +
       ");";
     let createTransaction = "CREATE TABLE IF NOT EXISTS transactions (" +
       "transactionId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
@@ -69,6 +69,9 @@ export class DatabaseServiceService {
       tx.executeSql(createType, [], () => {
         console.log("success");
       }, DatabaseServiceService.errorHandler);
+      tx.executeSql(createCategory, [], () => {
+        console.log("success category");
+      }, DatabaseServiceService.errorHandler);
       tx.executeSql("INSERT INTO type (typeName) VALUES ('Income'), ('Expense');", [], () => {
         console.log("success");
       }, DatabaseServiceService.errorHandler);
@@ -76,9 +79,6 @@ export class DatabaseServiceService {
         console.log("success");
       }, DatabaseServiceService.errorHandler);
       tx.executeSql(createRecurringTransaction, [], () => {
-        console.log("success");
-      }, DatabaseServiceService.errorHandler);
-      tx.executeSql(createCategory, [], () => {
         console.log("success");
       }, DatabaseServiceService.errorHandler);
     }, DatabaseServiceService.errorHandler, () => {
@@ -98,6 +98,17 @@ export class DatabaseServiceService {
     this.db = openDatabase(shortName, version, displayName, dbSize, dbCreateSuccess);
   }
 
+  dropDatabase(callback) {
+    let sql = ["DROP TABLE IF EXISTS category;", "DROP TABLE IF EXISTS recurringTransaction",
+      "DROP TABLE IF EXISTS transactions;", "DROP TABLE IF EXISTS type;"];
+    this.getDatabase().transaction((tx) => {
+      for (let i = 0; i < sql.length; i++) {
+        const s = sql[i];
+        tx.executeSql(s, [], callback, DatabaseServiceService.errorHandler);
+      }
+    });
+  }
+
   public insertCategory(category: Category, callback) {
     this.getDatabase().transaction((tx) => {
       let sql = "INSERT INTO category (categoryName, typeId) VALUES (?, ?);";
@@ -109,14 +120,14 @@ export class DatabaseServiceService {
   }
 
   public selectAllCategories(options: Array<any>): Observable<any> {
-    // let options: Array<any> = []
     let categories: Category[] = [];
 
     function txFunction(tx) {
       let sql = "SELECT * FROM category c " +
         "INNER JOIN type t " +
         "ON c.typeId = t.typeId " +
-        "WHERE c.typeId = ?;"
+        "WHERE c.typeId = ? " +
+        "ORDER BY c.categoryName;"
       tx.executeSql(sql, options, (tx, results) => {
         for (let i = 0; i < results.rows.length; i++) {
           const row: Category = results.rows[i];
@@ -262,7 +273,7 @@ export class DatabaseServiceService {
   }
 
   public selectAllRecurringAndNonTransactions(startDate: string, endDate: string): Observable<any> {
-    let options: Array<any> = [startDate, endDate, endDate, endDate]
+    let options: Array<any> = [startDate, endDate, startDate, endDate]
     console.log(options);
     let transactions: Transaction[] = [];
 
@@ -279,8 +290,7 @@ export class DatabaseServiceService {
         "FROM recurringTransaction rt " +
         "INNER JOIN category c ON rt.categoryId = c.categoryId " +
         "INNER JOIN type ty ON rt.typeId = ty.typeId " +
-        "WHERE " +
-        "((rt.endDate >= ? OR (rt.endDate IS NULL or rt.endDate = '')) AND rt.recurringTransactionDate <= ?) " +
+        "WHERE ((rt.endDate >= ? OR (rt.endDate IS NULL or rt.endDate = '')) AND rt.recurringTransactionDate <= ?) " +
         "ORDER BY type DESC, amount DESC;"
       tx.executeSql(sql, options, (tx, results) => {
         for (let i = 0; i < results.rows.length; i++) {
@@ -396,13 +406,13 @@ export class DatabaseServiceService {
   public updateRecurringTransaction(a: RecurringTransaction, callback): void {
     function txFunction(tx) {
       let sql = "UPDATE recurringTransaction " +
-      "SET categoryId = ?, typeId = ?, recurringTransactionDate = ?, recurringTransactionAmount = ?, " +
-      "recurringTransactionNote = ?, endDate = ? " +
-      "WHERE recurringTransactionId = ?;";
+        "SET categoryId = ?, typeId = ?, recurringTransactionDate = ?, recurringTransactionAmount = ?, " +
+        "recurringTransactionNote = ?, endDate = ? " +
+        "WHERE recurringTransactionId = ?;";
       let options = [a.categoryId, a.typeId,
-        a.recurringTransactionDate, a.recurringTransactionAmount,
-        a.recurringTransactionNote, a.endDate,
-        a.recurringTransactionId];
+      a.recurringTransactionDate, a.recurringTransactionAmount,
+      a.recurringTransactionNote, a.endDate,
+      a.recurringTransactionId];
       console.log(options);
       tx.executeSql(sql, options, callback, DatabaseServiceService.errorHandler);
       console.log("dagae")
@@ -416,13 +426,13 @@ export class DatabaseServiceService {
   public updateTransaction(a: Transaction, callback): void {
     function txFunction(tx) {
       let sql = "UPDATE transactions " +
-      "SET categoryId = ?, typeId = ?, transactionDate = ?, transactionAmount = ?, " +
-      "transactionNote = ? " +
-      "WHERE transactionId = ?;";
+        "SET categoryId = ?, typeId = ?, transactionDate = ?, transactionAmount = ?, " +
+        "transactionNote = ? " +
+        "WHERE transactionId = ?;";
       let options = [a.categoryId, a.typeId,
-        a.transactionDate, a.transactionAmount,
-        a.transactionNote,
-        a.transactionId];
+      a.transactionDate, a.transactionAmount,
+      a.transactionNote,
+      a.transactionId];
       console.log(options);
       tx.executeSql(sql, options, callback, DatabaseServiceService.errorHandler);
       console.log("dagae")

@@ -14,7 +14,7 @@
 }
 
 .topBarButton {
-  font-weight:900;
+  font-weight: 900;
 }
 
 table {
@@ -39,6 +39,15 @@ table {
   display: none;
 }
 
+#leftButton {
+  margin-right: 7%;
+}
+
+#dateRange {
+  width: 100%;
+  margin: 0 auto;
+}
+
 @media only screen and (max-width: 663px) {
   #top {
     display: none;
@@ -53,14 +62,14 @@ table {
   }
 
   .leftButton {
-      margin-left: 10%;
+    margin-left: 13%;
   }
 
 }
 
 @media only screen and (max-width: 334px) {
-    .bottomButton {
-        margin-bottom: 1%;
-    }
-  
+  .bottomButton {
+    margin-bottom: 1%;
   }
+
+}

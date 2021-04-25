@@ -10,6 +10,13 @@ CREATE TABLE IF NOT EXISTS category (
     FOREIGN KEY(typeId) REFERENCES type(typeId) 
 );
 
+CREATE TABLE IF NOT EXISTS category (
+    categoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    typeId INTEGER NOT NULL,
+    categoryName VARCHAR(30) NOT NULL,
+    FOREIGN KEY(typeId) REFERENCES type(typeId)
+);
+
 CREATE TABLE IF NOT EXISTS transactions (
     transactionId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     categoryId INTEGER NOT NULL,
@@ -71,13 +78,13 @@ ty.typeName AS 'type', t.transactionDate AS 'date', t.transactionNote AS 'note',
 FROM transactions t 
 INNER JOIN category c ON t.categoryId = c.categoryId 
 INNER JOIN type ty ON t.typeId = ty.typeId 
-WHERE t.transactionDate BETWEEN '2021-04-01' AND '2021-04-30' 
+WHERE t.transactionDate BETWEEN '2021-06-01' AND '2021-06-30' 
 UNION 
 SELECT rt.recurringTransactionId AS 'id', c.categoryName AS 'category', rt.recurringTransactionAmount AS 'amount', 
 ty.typeName AS 'type', rt.recurringTransactionDate AS 'date', rt.recurringTransactionNote AS 'note', 'true' AS 'recurring' 
 FROM recurringTransaction rt 
 INNER JOIN category c ON rt.categoryId = c.categoryId 
 INNER JOIN type ty ON rt.typeId = ty.typeId 
-WHERE
-((rt.endDate >= '2021-04-30' OR (rt.endDate IS NULL or rt.endDate = '')) AND rt.recurringTransactionDate <= '2021-04-30) 
+WHERE ((rt.endDate >= '2021-06-01' OR (rt.endDate IS NULL or rt.endDate = '')) AND rt.recurringTransactionDate <= '2021-06-30') OR 
+((rt.endDate >= '2021-06-30' OR (rt.endDate IS NULL or rt.endDate = '')) AND rt.recurringTransactionDate <= '2021-06-30')
 ORDER BY type DESC, amount DESC;

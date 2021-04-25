@@ -14,8 +14,9 @@
         </thead>
         <tbody>
             <tr *ngFor="let transaction of transactions">
-                <td *ngIf="transaction.note == ''">{{transaction.category}}</td>
-                <td>${{transaction.amount.toFixed(2)}}</td>
+                <td *ngIf="transaction.note == ''">{{transaction.category}}<br>{{transaction.date}}</td>
+                <td *ngIf="transaction.note != ''">{{transaction.note}}<br>{{transaction.date}}</td>
+                <td [class.income]="transaction.type == 'Income'" [class.expense]="transaction.type == 'Expense'">${{transaction.amount.toFixed(2)}}</td>
                 <td *ngIf="!transaction.recurring" class="btn-group">
                     <a class="btn btn-info" role="button" [routerLink]="'/transactions/edit/' + transaction.id">Edit</a>
                     <a class="btn btn-danger" role="button" (click)="btnDeleteTransaction_click(transaction.id, false)">Delete</a>

@@ -15,10 +15,11 @@ export class SettingsComponent implements OnInit {
 
   btnCreateDatabase_click() {
     this.database.initDB();
-    
   }
 
   btnDropDatabase_click() {
-    
+    this.database.dropDatabase(() => {
+      console.info("dropped a table");
+    })
   }
 }

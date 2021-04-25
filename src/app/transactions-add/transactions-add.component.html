@@ -11,13 +11,12 @@
             id="transactionIncome" autocomplete="off" (click)="changeType(1)" [checked]="this.transactionForm.get('_transactionType').value == 1"> Income
         </label>
 
-        
     </div>
     <div class="text-danger" id="_transactionTypeError"></div>
 
     <div class="fields-wrapper">
         <label for="transactionCategory">Category</label>
-        <a routerLink="/categories/add/">+Add new category</a>
+        <a [routerLink]="'/categories/add/' + this.type">+Add new category</a>
         <select formControlName="_transactionCategory" class="form-control" id="transactionCategory">
             <option [id]="'category' + category.categoryId" *ngFor="let category of categories; let i = index;" [ngValue]="category.categoryId">
                 {{category.categoryName}}</option>

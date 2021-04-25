@@ -56,7 +56,7 @@ export class TransactionsComponent implements OnInit {
       console.log(data);
       this.transactions = data;
     })
-
+    
   }
 
   btnDeleteTransaction_click(id: Number, isRecurring: Boolean) {
